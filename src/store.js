@@ -2,8 +2,6 @@ import { makeObservable, observable, action } from "mobx";
 import { createContext } from "react";
 
 class Store {
-  emailData = "";
-  passwordData = "";
   loggedIn = false;
   buy = true;
   sell = false;
@@ -23,8 +21,6 @@ class Store {
 
   constructor() {
     makeObservable(this, {
-      emailData: observable,
-      passwordData: observable,
       loggedIn: observable,
       buy: observable,
       sell: observable,
@@ -32,8 +28,6 @@ class Store {
       userId: observable,
       openEdit: observable,
       editItem: observable,
-      setEmail: action,
-      setPassword: action,
       setLoggedIn: action,
       setLogOut: action,
       setBuy: action,
@@ -45,14 +39,6 @@ class Store {
       setEditItem: action,
     });
   }
-
-  setEmail = (emailData) => {
-    this.emailData = emailData;
-  };
-
-  setPassword = (passwordData) => {
-    this.passwordData = passwordData;
-  };
 
   setLoggedIn = () => {
     this.loggedIn = true;

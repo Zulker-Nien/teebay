@@ -4,67 +4,44 @@ import { TextField, Button, Box, Grid } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
-import Store from "../store";
+import { ApolloClient, useMutation } from "@apollo/client";
+import Store from "../../store";
 import { toast } from "react-toastify";
-
-type Inputs = {
-  email: string;
-  password: string;
-};
-
-interface LoginProps {
-  authorized: boolean;
-}
-
-interface User {
-  id: number;
-  email: string;
-  password: string;
-}
+import LOGIN_USER from "../Queries/loginUser";
+import { User, LoginInput, LoginProps } from "../Types/userTypes";
+import apolloClient from "../../ApolloClient";
 
 interface LoginUserData {
   login: User;
 }
 
-const LOGIN_USER = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      email
-      password
-      id
-    }
-  }
-`;
-
 const LoginForm = (props: LoginProps) => {
   const notify = () => toast("You are now logged in.");
 
   const store = useContext(Store);
-  const { setEmail, setPassword, setLoggedIn, setUserId } = store;
+  const { setLoggedIn, setUserId, loggedIn } = store;
+
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const { register, handleSubmit } = useForm<LoginInput>();
+  const onSubmit: SubmitHandler<LoginInput> = (data) => {
     login({
       variables: {
         email: data.email,
         password: data.password,
       },
     });
-    notify();
   };
 
-  const [login, { data }] = useMutation<LoginUserData, Inputs>(LOGIN_USER);
+  const [login, { data }] = useMutation<LoginUserData, LoginInput>(LOGIN_USER);
 
   useEffect(() => {
     if (data != null) {
-      setEmail(data?.login.email);
-      setPassword(data?.login.password);
       setUserId(data?.login.id);
       setLoggedIn();
       navigate("/home");
+      notify();
     }
-  }, [data, navigate, setEmail, setLoggedIn, setPassword, setUserId]);
+  }, [data, loggedIn, navigate, setLoggedIn, setUserId]);
 
   return (
     <>

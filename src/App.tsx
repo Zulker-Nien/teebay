@@ -1,10 +1,10 @@
 import "./Assets/global.scss";
-import LoginForm from "./components/LoginForm";
+import LoginForm from "./components/Forms/LoginForm";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import SignUpForm from "./components/SignUpForm";
+import SignUpForm from "./components/Forms/SignUpForm";
 import Home from "./pages/Home";
 import { Routes, Route } from "react-router-dom";
 import Store from "./store";

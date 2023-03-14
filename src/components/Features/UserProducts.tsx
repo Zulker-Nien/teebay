@@ -1,4 +1,4 @@
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import Store from "../../store";
 import { useCallback, useContext, useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,35 +17,14 @@ import {
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import EditForm from "../EditForm";
-
-interface UserProduct {
-  id: number;
-}
-
+import EditForm from "../Forms/EditForm";
+import GET_ALL_USER_PRODUCTS from "../Queries/getUserProduct";
+import { UserProduct } from "../Types/productTypes";
+import DELETE_PRODUCT from "../Queries/deleteProduct";
 interface UserProductData {
   getProductsByUserId: UserProduct;
 }
 
-const GET_ALL_USER_PRODUCTS = gql`
-  query getProductsByUserId($userId: Int!) {
-    getProductsByUserId(userId: $userId) {
-      id
-      title
-      categories
-      description
-      price
-      rentPrice
-      option
-    }
-  }
-`;
-
-const DELETE_PRODUCT = gql`
-  mutation deleteProduct($id: Int!) {
-    deleteProduct(id: $id)
-  }
-`;
 const style = {
   position: "absolute" as "absolute",
   display: "flex",
@@ -65,6 +44,7 @@ const style = {
 const UserProducts = () => {
   const store = useContext(Store);
   const { userId, openEdit, setOpenEdit, setEditItem } = store;
+
   const [allUserProducts, setAllUserProducts] = useState<any>();
   const [deleteId, setDeleteId] = useState<number>();
 

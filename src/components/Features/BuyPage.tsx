@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   Box,
   Button,
@@ -15,33 +15,10 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import "../../Assets/global.scss";
 import Store from "../../store";
 import { observer } from "mobx-react-lite";
-
-const GET_ALL_PRODUCTS = gql`
-  query getAllProducts {
-    getAllProducts {
-      id
-      title
-      categories
-      description
-      price
-      option
-      status
-      ownerId
-    }
-  }
-`;
-
-const BUY_PRODUCT = gql`
-  mutation buyProduct($id: Int!, $status: String!, $ownerId: Int!) {
-    buyProduct(id: $id, status: $status, ownerId: $ownerId)
-  }
-`;
-
-interface BuyProductInput {
-  id: number;
-  status: string;
-  ownerId: number;
-}
+import CloseIcon from "@mui/icons-material/Close";
+import BUY_PRODUCT from "../Queries/buyProduct";
+import GET_ALL_PRODUCTS from "../Queries/getAllProduct";
+import { BuyProductInput } from "../Types/productTypes";
 
 interface BuyProductResponse {
   buyProduct: BuyProductInput;
@@ -65,7 +42,7 @@ const style = {
 
 const BuyPage = () => {
   const store = useContext(Store);
-  const { singleItem, setSingleItem, userId } = store;
+  const { singleItem, setSingleItem, userId, setBuy } = store;
   const [allProducts, setAllProducts] = useState<object[]>([]);
 
   const [buyProduct] = useMutation<BuyProductResponse, BuyProductInput>(
@@ -92,6 +69,7 @@ const BuyPage = () => {
         ownerId: userId,
       },
     });
+    setBuy();
   };
   const handleRentClose = () => {
     setRentOpen(false);
@@ -110,7 +88,9 @@ const BuyPage = () => {
       setAllProducts(data.getAllProducts);
     }
   }, [data, setAllProducts]);
-
+  useEffect(() => {
+    setBuy();
+  }, [setBuy]);
   return (
     <div className="buyPageContainer">
       <Grid
@@ -180,8 +160,14 @@ const BuyPage = () => {
                       variant="outlined"
                       sx={{ width: "100%" }}
                       onClick={() => {
-                        setSingleItem(item.id);
-                        handleOpen();
+                        if (item.status === "Sold") {
+                          alert("This item is already Sold");
+                        } else if (userId !== item.ownerId) {
+                          setSingleItem(item.id);
+                          handleOpen();
+                        } else {
+                          alert("This is your product!");
+                        }
                       }}
                     >
                       Buy
@@ -192,8 +178,12 @@ const BuyPage = () => {
                       variant="outlined"
                       sx={{ width: "100%" }}
                       onClick={() => {
-                        setSingleItem(item.id);
-                        handleRentOpen();
+                        if (item.status === "Rented") {
+                          alert("This item is already Rented");
+                        } else {
+                          setSingleItem(item.id);
+                          handleRentOpen();
+                        }
                       }}
                     >
                       Rent
@@ -211,9 +201,24 @@ const BuyPage = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Confirm Payment and buy.
-          </Typography>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Confirm Payment and buy.
+            </Typography>
+            <Button
+              onClick={() => {
+                setBuyOpen(false);
+              }}
+            >
+              <CloseIcon />
+            </Button>
+          </div>
 
           <Button
             onClick={() => {
@@ -230,7 +235,26 @@ const BuyPage = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <TextField id="outlined-basic" label="Rent Time" variant="outlined" />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              id="outlined-basic"
+              label="Rent Time"
+              variant="outlined"
+            />
+            <Button
+              onClick={() => {
+                setRentOpen(false);
+              }}
+            >
+              <CloseIcon />
+            </Button>
+          </div>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Confirm Payment and Rent.
           </Typography>

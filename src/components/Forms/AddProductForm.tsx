@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Box,
   Button,
@@ -14,10 +14,15 @@ import {
   TextareaAutosize,
   TextField,
 } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Store from "../store";
+import Store from "../../store";
+import ADD_PRODUCT from "../Queries/addProduct";
+import { ProductInputs, CreateProductInput } from "../Types/productTypes";
+import LOGIN_USER from "../Queries/loginUser";
+import apolloClient from "../../ApolloClient";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,79 +44,19 @@ const categoryList = [
 ];
 const optionList = ["Rent", "Sell"];
 
-type Inputs = {
-  title: string;
-  categories: string[];
-  description: string;
-  price: number;
-  rentPrice: number;
-  option: string;
-  status: string;
-  ownerId: number;
-};
-
-interface CreateProductInput {
-  title: string;
-  categories: string[];
-  description: string;
-  price: number;
-  rentPrice: number;
-  option: string;
-  userId: number;
-  status: string;
-  ownerId: number;
-}
-
 interface CreateProductResponse {
   addProduct: CreateProductInput;
 }
-
-const ADD_PRODUCT = gql`
-  mutation addProduct(
-    $title: String!
-    $categories: [String!]!
-    $description: String!
-    $price: Int!
-    $rentPrice: Int!
-    $option: String!
-    $userId: Int!
-    $status: String!
-    $ownerId: Int!
-  ) {
-    addProduct(
-      title: $title
-      categories: $categories
-      description: $description
-      price: $price
-      rentPrice: $rentPrice
-      option: $option
-      userId: $userId
-      status: $status
-      ownerId: $ownerId
-    ) {
-      title
-      categories
-      description
-      price
-      rentPrice
-      option
-      userId
-      status
-      ownerId
-    }
-  }
-`;
-
 const AddProductForm = () => {
   const productAddNotification = () => toast("Product added successfully.");
   const store = useContext(Store);
   const { setBuy, userId } = store;
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<ProductInputs>();
   const [addProduct] = useMutation<CreateProductResponse, CreateProductInput>(
     ADD_PRODUCT
   );
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<ProductInputs> = async (data) => {
     try {
       await addProduct({
         variables: {
@@ -126,6 +71,7 @@ const AddProductForm = () => {
           ownerId: 0,
         },
       });
+
       await productAddNotification();
       console.log(data);
       setBuy();
@@ -135,6 +81,7 @@ const AddProductForm = () => {
 
   const [categories, setCategories] = useState<string[]>([]);
   const [option, setOption] = useState<string>("");
+
   const handleCategories = (event: SelectChangeEvent<typeof categories>) => {
     const {
       target: { value },
@@ -259,4 +206,4 @@ const AddProductForm = () => {
   );
 };
 
-export default AddProductForm;
+export default observer(AddProductForm);

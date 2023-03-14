@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Box,
   Button,
@@ -14,36 +14,15 @@ import {
   TextareaAutosize,
   TextField,
 } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Store from "../store";
+import Store from "../../store";
+import EDIT_PRODUCT from "../Queries/editProduct";
+import { EditProductInput, EditInput } from "../Types/productTypes";
 
-type Inputs = {
-  id: number;
-  title: string;
-  categories: string[];
-  description: string;
-  price: number;
-  rentPrice: number;
-  option: string;
-  status: string;
-  ownerId: number;
-};
-interface CreateProductInput {
-  id: number;
-  title: string;
-  categories: string[];
-  description: string;
-  price: number;
-  rentPrice: number;
-  option: string;
-  userId: number;
-  status: string;
-  ownerId: number;
-}
-
-interface CreateProductResponse {
-  addProduct: CreateProductInput;
+interface EditProductResponse {
+  addProduct: EditProductInput;
 }
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -65,16 +44,12 @@ const categoryList = [
 ];
 const optionList = ["Rent", "Sell"];
 
-const EDIT_PRODUCT = gql`
-  mutation updateProduct($id: Int!, $title: String!, $categories: [String!]!) {
-    updateProduct(id: $id, title: $title, categories: $categories)
-  }
-`;
-
 const EditForm = () => {
   const store = useContext(Store);
   const { setCloseEdit, editItem, userId } = store;
-  const { register, handleSubmit } = useForm<Inputs>();
+
+  const { register, handleSubmit } = useForm<EditInput>();
+
   const [categories, setCategories] = useState<string[]>(editItem.categories);
   const [option, setOption] = useState<string>(editItem.option);
 
@@ -84,14 +59,15 @@ const EditForm = () => {
     } = event;
     setCategories(typeof value === "string" ? value.split(",") : value);
   };
-
   const handleOption = (event: SelectChangeEvent<typeof option>) => {
     setOption(event.target.value as string);
   };
-  const [editProduct] = useMutation<CreateProductResponse, CreateProductInput>(
+
+  const [editProduct] = useMutation<EditProductResponse, EditProductInput>(
     EDIT_PRODUCT
   );
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+
+  const onSubmit: SubmitHandler<EditInput> = async (data) => {
     try {
       await editProduct({
         variables: {
@@ -246,4 +222,4 @@ const EditForm = () => {
   );
 };
 
-export default EditForm;
+export default observer(EditForm);

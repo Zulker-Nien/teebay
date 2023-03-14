@@ -1,59 +1,15 @@
 import Container from "@mui/material/Container";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TextField, Button, Box, Grid } from "@mui/material";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-type Inputs = {
-  firstName: string;
-  lastName: string;
-  address: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-};
-
-interface CreateUserInput {
-  firstName: string;
-  lastName: string;
-  address: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-}
+import CREATE_USER from "../Queries/signUpUser";
+import { SignUpInputs, CreateUserInput } from "../Types/userTypes";
 
 interface CreateUserResponse {
   createUser: CreateUserInput;
 }
-
-const CREATE_USER = gql`
-  mutation createUser(
-    $firstName: String!
-    $lastName: String!
-    $address: String!
-    $email: String!
-    $phoneNumber: String!
-    $password: String!
-  ) {
-    createUser(
-      firstName: $firstName
-      lastName: $lastName
-      address: $address
-      email: $email
-      phoneNumber: $phoneNumber
-      password: $password
-    ) {
-      firstName
-      lastName
-      address
-      email
-      phoneNumber
-      password
-    }
-  }
-`;
 
 const SignUpForm = () => {
   const signUpNotification = () => toast("You have registered successfully.");
@@ -62,13 +18,13 @@ const SignUpForm = () => {
     toast("An error occurred while signing up.");
 
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<SignUpInputs>();
 
   const [createUser] = useMutation<CreateUserResponse, CreateUserInput>(
     CREATE_USER
   );
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     if (data.password !== data.confirmPassword) {
       unmatchPasswordNotification();
       return;
