@@ -1,25 +1,96 @@
 import Container from "@mui/material/Container";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TextField, Button, Box, Grid } from "@mui/material";
-import { HTMLInputTypeAttribute } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type Inputs = {
-  fName: HTMLInputTypeAttribute;
-  lName: HTMLInputTypeAttribute;
-  address: HTMLInputTypeAttribute;
-  email: HTMLInputTypeAttribute;
-  number: HTMLInputTypeAttribute;
-  password: HTMLInputTypeAttribute;
-  confirmPassword: HTMLInputTypeAttribute;
+  firstName: string;
+  lastName: string;
+  address: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
 };
 
+interface CreateUserInput {
+  firstName: string;
+  lastName: string;
+  address: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+}
+
+interface CreateUserResponse {
+  createUser: CreateUserInput;
+}
+
+const CREATE_USER = gql`
+  mutation createUser(
+    $firstName: String!
+    $lastName: String!
+    $address: String!
+    $email: String!
+    $phoneNumber: String!
+    $password: String!
+  ) {
+    createUser(
+      firstName: $firstName
+      lastName: $lastName
+      address: $address
+      email: $email
+      phoneNumber: $phoneNumber
+      password: $password
+    ) {
+      firstName
+      lastName
+      address
+      email
+      phoneNumber
+      password
+    }
+  }
+`;
+
 const SignUpForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const signUpNotification = () => toast("You have registered successfully.");
+  const unmatchPasswordNotification = () => toast("Passwords do not match.");
+  const unsuccessfulNotification = () =>
+    toast("An error occurred while signing up.");
+
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<Inputs>();
+
+  const [createUser] = useMutation<CreateUserResponse, CreateUserInput>(
+    CREATE_USER
+  );
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      unmatchPasswordNotification();
+      return;
+    }
+
+    try {
+      await createUser({
+        variables: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          password: data.password,
+        },
+      });
+      signUpNotification();
+      navigate("/");
+    } catch (error) {
+      unsuccessfulNotification();
+    }
+  };
   return (
     <div>
       <Container
@@ -56,11 +127,11 @@ const SignUpForm = () => {
             <Grid container spacing={3}>
               <Grid item xs={6}>
                 <TextField
-                  id="fName"
+                  id="firstName"
                   label="First Name"
                   variant="outlined"
                   type="string"
-                  {...register("fName")}
+                  {...register("firstName")}
                   sx={{
                     minWidth: "100%",
                   }}
@@ -73,7 +144,7 @@ const SignUpForm = () => {
                   label="Last Name"
                   variant="outlined"
                   type="string"
-                  {...register("lName")}
+                  {...register("lastName")}
                   sx={{
                     minWidth: "100%",
                   }}
@@ -109,11 +180,11 @@ const SignUpForm = () => {
 
               <Grid item xs={6}>
                 <TextField
-                  id="number"
+                  id="phoneNumber"
                   label="Phone Number"
                   variant="outlined"
                   type="string"
-                  {...register("number")}
+                  {...register("phoneNumber")}
                   sx={{
                     minWidth: "100%",
                   }}
@@ -157,6 +228,14 @@ const SignUpForm = () => {
                 >
                   Sign Up
                 </Button>
+              </Grid>
+              <Grid item xs={12} style={{ textAlign: "center" }}>
+                <h3>
+                  Already have an account?{" "}
+                  <span>
+                    <Link to="/">Sign In</Link>
+                  </span>
+                </h3>
               </Grid>
             </Grid>
           </Box>

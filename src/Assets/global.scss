@@ -6,4 +6,28 @@ body,
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0;
+  top: 10vh;
+}
+
+.navbarContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sellPageContainer {
+  position: relative;
+  overflow-y: scroll;
+}
+.buyPageContainer {
+  height: 85vh;
+  margin-top: 10vh;
+  position: relative;
+  overflow-y: scroll;
+  // background-color: antiquewhite;
+  .categories {
+    display: flex;
+    align-items: center;
+  }
 }
