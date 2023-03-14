@@ -14,11 +14,37 @@ import {
   TextareaAutosize,
   TextField,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import Store from "../store";
 
+type Inputs = {
+  id: number;
+  title: string;
+  categories: string[];
+  description: string;
+  price: number;
+  rentPrice: number;
+  option: string;
+  status: string;
+  ownerId: number;
+};
+interface CreateProductInput {
+  id: number;
+  title: string;
+  categories: string[];
+  description: string;
+  price: number;
+  rentPrice: number;
+  option: string;
+  userId: number;
+  status: string;
+  ownerId: number;
+}
+
+interface CreateProductResponse {
+  addProduct: CreateProductInput;
+}
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -39,82 +65,37 @@ const categoryList = [
 ];
 const optionList = ["Rent", "Sell"];
 
-type Inputs = {
-  title: string;
-  categories: string[];
-  description: string;
-  price: number;
-  rentPrice: number;
-  option: string;
-  status: string;
-  ownerId: number;
-};
-
-interface CreateProductInput {
-  title: string;
-  categories: string[];
-  description: string;
-  price: number;
-  rentPrice: number;
-  option: string;
-  userId: number;
-  status: string;
-  ownerId: number;
-}
-
-interface CreateProductResponse {
-  addProduct: CreateProductInput;
-}
-
-const ADD_PRODUCT = gql`
-  mutation addProduct(
-    $title: String!
-    $categories: [String!]!
-    $description: String!
-    $price: Int!
-    $rentPrice: Int!
-    $option: String!
-    $userId: Int!
-    $status: String!
-    $ownerId: Int!
-  ) {
-    addProduct(
-      title: $title
-      categories: $categories
-      description: $description
-      price: $price
-      rentPrice: $rentPrice
-      option: $option
-      userId: $userId
-      status: $status
-      ownerId: $ownerId
-    ) {
-      title
-      categories
-      description
-      price
-      rentPrice
-      option
-      userId
-      status
-      ownerId
-    }
+const EDIT_PRODUCT = gql`
+  mutation updateProduct($id: Int!, $title: String!, $categories: [String!]!) {
+    updateProduct(id: $id, title: $title, categories: $categories)
   }
 `;
 
-const AddProductForm = () => {
-  const productAddNotification = () => toast("Product added successfully.");
+const EditForm = () => {
   const store = useContext(Store);
-  const { setBuy, userId } = store;
+  const { setCloseEdit, editItem, userId } = store;
   const { register, handleSubmit } = useForm<Inputs>();
-  const [addProduct] = useMutation<CreateProductResponse, CreateProductInput>(
-    ADD_PRODUCT
-  );
+  const [categories, setCategories] = useState<string[]>(editItem.categories);
+  const [option, setOption] = useState<string>(editItem.option);
 
+  const handleCategories = (event: SelectChangeEvent<typeof categories>) => {
+    const {
+      target: { value },
+    } = event;
+    setCategories(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleOption = (event: SelectChangeEvent<typeof option>) => {
+    setOption(event.target.value as string);
+  };
+  const [editProduct] = useMutation<CreateProductResponse, CreateProductInput>(
+    EDIT_PRODUCT
+  );
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await addProduct({
+      await editProduct({
         variables: {
+          id: editItem.id,
           title: data.title,
           categories: data.categories,
           description: data.description,
@@ -126,24 +107,9 @@ const AddProductForm = () => {
           ownerId: 0,
         },
       });
-      await productAddNotification();
+      //   await productAddNotification();
       console.log(data);
-      setBuy();
     } catch (error) {}
-  };
-  useEffect(() => {}, [handleSubmit]);
-
-  const [categories, setCategories] = useState<string[]>([]);
-  const [option, setOption] = useState<string>("");
-  const handleCategories = (event: SelectChangeEvent<typeof categories>) => {
-    const {
-      target: { value },
-    } = event;
-    setCategories(typeof value === "string" ? value.split(",") : value);
-  };
-
-  const handleOption = (event: SelectChangeEvent<typeof option>) => {
-    setOption(event.target.value as string);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -156,6 +122,22 @@ const AddProductForm = () => {
           justifyContent: "space-evenly",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h1>Edit Form</h1>
+          <Button
+            onClick={() => {
+              setCloseEdit();
+            }}
+          >
+            Close
+          </Button>
+        </div>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -163,6 +145,7 @@ const AddProductForm = () => {
               placeholder="Title"
               {...register("title", {})}
               sx={{ minWidth: "100%" }}
+              defaultValue={editItem.title}
             />
           </Grid>
 
@@ -204,6 +187,7 @@ const AddProductForm = () => {
               }}
               {...register("description", {})}
               placeholder="Description"
+              defaultValue={editItem.description}
             />
           </Grid>
           <Grid item xs={4}>
@@ -212,6 +196,7 @@ const AddProductForm = () => {
               placeholder="Price"
               {...register("price", {})}
               sx={{ minWidth: "100%" }}
+              defaultValue={editItem.price}
             />
           </Grid>
 
@@ -221,6 +206,7 @@ const AddProductForm = () => {
               placeholder="Rent Price"
               {...register("rentPrice", {})}
               sx={{ minWidth: "100%" }}
+              defaultValue={editItem.rentPrice}
             />
           </Grid>
 
@@ -234,6 +220,7 @@ const AddProductForm = () => {
                 {...register("option")}
                 onChange={handleOption}
                 input={<OutlinedInput label="Option" />}
+                defaultValue={editItem.option}
               >
                 {optionList.map((name) => (
                   <MenuItem key={name} value={name}>
@@ -259,4 +246,4 @@ const AddProductForm = () => {
   );
 };
 
-export default AddProductForm;
+export default EditForm;

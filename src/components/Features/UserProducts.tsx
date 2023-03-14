@@ -17,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import EditForm from "../EditForm";
 
 interface UserProduct {
   id: number;
@@ -63,9 +64,10 @@ const style = {
 
 const UserProducts = () => {
   const store = useContext(Store);
-  const { userId } = store;
+  const { userId, openEdit, setOpenEdit, setEditItem } = store;
   const [allUserProducts, setAllUserProducts] = useState<any>();
   const [deleteId, setDeleteId] = useState<number>();
+
   const res = useQuery<UserProductData>(GET_ALL_USER_PRODUCTS, {
     variables: { userId },
   });
@@ -83,10 +85,12 @@ const UserProducts = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = (id: any) => {
     setDeleteId(id);
-    console.log(id);
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleDelete = useCallback(
     (index: any) => {
       deleteProduct({
@@ -99,57 +103,74 @@ const UserProducts = () => {
 
   return (
     <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Product Title</TableCell>
-              <TableCell align="right">Categories</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Rent Price</TableCell>
-              <TableCell align="right">Option</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {allUserProducts != null &&
-              allUserProducts.map((item: any, index: any) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell align="right">{item.title}</TableCell>
-                    <TableCell align="right">{item.categories}</TableCell>
-                    <TableCell align="center">{item.description}</TableCell>
-                    <TableCell align="right">{item.price}</TableCell>
-                    <TableCell align="right">{item.rentPrice}</TableCell>
-                    <TableCell align="right">{item.option}</TableCell>
-                    <TableCell align="right">
-                      <Button onClick={() => handleOpen(item.id)}>
-                        {res2.loading ? <p>..deleting</p> : <DeleteIcon />}
-                      </Button>
-                      <Button>
-                        <EditIcon />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-          <Modal
-            open={open}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Are you sure you want to delete?
-              </Typography>
-              <Button onClick={handleDelete}>Yes</Button>
-              <Button onClick={handleClose}>No</Button>
-            </Box>
-          </Modal>
-        </Table>
-      </TableContainer>
+      {openEdit ? (
+        <EditForm />
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Product Title</TableCell>
+                <TableCell align="center">Categories</TableCell>
+                <TableCell align="center">Description</TableCell>
+                <TableCell align="center">Price</TableCell>
+                <TableCell align="center">Rent Price</TableCell>
+                <TableCell align="center">Option</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allUserProducts != null &&
+                allUserProducts.map((item: any, index: any) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell align="center">{item.title}</TableCell>
+                      <TableCell align="center">{item.categories}</TableCell>
+                      <TableCell align="center">{item.description}</TableCell>
+                      <TableCell align="center">{item.price}</TableCell>
+                      <TableCell align="center">{item.rentPrice}</TableCell>
+                      <TableCell align="center">{item.option}</TableCell>
+                      <TableCell align="center">
+                        <Button onClick={() => handleOpen(item.id)}>
+                          {res2.loading ? <p>...deleting</p> : <DeleteIcon />}
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setOpenEdit();
+                            setEditItem({
+                              id: item.id,
+                              title: item.title,
+                              categories: [item.categories],
+                              description: item.description,
+                              price: item.price,
+                              rentPrice: item.rentPrice,
+                              option: item.option,
+                            });
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+            <Modal
+              open={open}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Are you sure you want to delete?
+                </Typography>
+                <Button onClick={handleDelete}>Yes</Button>
+                <Button onClick={handleClose}>No</Button>
+              </Box>
+            </Modal>
+          </Table>
+        </TableContainer>
+      )}
     </div>
   );
 };

@@ -78,7 +78,6 @@ const LoginForm = (props: LoginProps) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              //   minWidth: "100%",
               minHeight: "100%",
               p: "2%",
               border: "3px solid #c5c5c5",
@@ -97,7 +96,6 @@ const LoginForm = (props: LoginProps) => {
               <Box
                 sx={{
                   height: "100%",
-                  //   minWidth: "50%",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-evenly",

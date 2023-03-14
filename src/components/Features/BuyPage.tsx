@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   Chip,
   Grid,
   Modal,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -24,9 +25,28 @@ const GET_ALL_PRODUCTS = gql`
       description
       price
       option
+      status
+      ownerId
     }
   }
 `;
+
+const BUY_PRODUCT = gql`
+  mutation buyProduct($id: Int!, $status: String!, $ownerId: Int!) {
+    buyProduct(id: $id, status: $status, ownerId: $ownerId)
+  }
+`;
+
+interface BuyProductInput {
+  id: number;
+  status: string;
+  ownerId: number;
+}
+
+interface BuyProductResponse {
+  buyProduct: BuyProductInput;
+}
+
 const style = {
   position: "absolute" as "absolute",
   display: "flex",
@@ -45,17 +65,44 @@ const style = {
 
 const BuyPage = () => {
   const store = useContext(Store);
-  const { singleItem, setSingleItem } = store;
+  const { singleItem, setSingleItem, userId } = store;
   const [allProducts, setAllProducts] = useState<object[]>([]);
 
-  const [open, setOpen] = useState(false);
+  const [buyProduct] = useMutation<BuyProductResponse, BuyProductInput>(
+    BUY_PRODUCT
+  );
+
+  const [buyOpen, setBuyOpen] = useState(false);
+  const [rentOpen, setRentOpen] = useState(false);
 
   const handleOpen = useCallback(() => {
-    setOpen(true);
-    console.log(singleItem);
-  }, [setOpen, singleItem]);
+    setBuyOpen(true);
+  }, [setBuyOpen]);
 
-  const handleClose = () => setOpen(false);
+  const handleRentOpen = useCallback(() => {
+    setRentOpen(true);
+  }, [setRentOpen]);
+
+  const handleBuyClose = () => {
+    setBuyOpen(false);
+    buyProduct({
+      variables: {
+        id: singleItem,
+        status: "Sold",
+        ownerId: userId,
+      },
+    });
+  };
+  const handleRentClose = () => {
+    setRentOpen(false);
+    buyProduct({
+      variables: {
+        id: singleItem,
+        status: "Rented",
+        ownerId: userId,
+      },
+    });
+  };
 
   const { data } = useQuery(GET_ALL_PRODUCTS);
   useEffect(() => {
@@ -117,6 +164,15 @@ const BuyPage = () => {
                   <Typography color="text.secondary">
                     Price: {item.price}
                   </Typography>
+                  <Typography
+                    color={item.status === "" ? "#00ff00" : "#ff0000"}
+                  >
+                    {item.status === "Rented"
+                      ? "Rented"
+                      : item.status === "Sold"
+                      ? "Sold"
+                      : "Available"}
+                  </Typography>
                 </CardContent>
                 <CardActions>
                   {item.option === "Sell" && (
@@ -132,7 +188,14 @@ const BuyPage = () => {
                     </Button>
                   )}
                   {item.option === "Rent" && (
-                    <Button variant="outlined" sx={{ width: "100%" }}>
+                    <Button
+                      variant="outlined"
+                      sx={{ width: "100%" }}
+                      onClick={() => {
+                        setSingleItem(item.id);
+                        handleRentOpen();
+                      }}
+                    >
                       Rent
                     </Button>
                   )}
@@ -143,7 +206,7 @@ const BuyPage = () => {
         })}
       </Grid>
       <Modal
-        open={open}
+        open={buyOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -154,10 +217,30 @@ const BuyPage = () => {
 
           <Button
             onClick={() => {
-              handleClose();
+              handleBuyClose();
             }}
           >
             Buy Now
+          </Button>
+        </Box>
+      </Modal>
+      <Modal
+        open={rentOpen}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <TextField id="outlined-basic" label="Rent Time" variant="outlined" />
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Confirm Payment and Rent.
+          </Typography>
+
+          <Button
+            onClick={() => {
+              handleRentClose();
+            }}
+          >
+            Rent Now
           </Button>
         </Box>
       </Modal>

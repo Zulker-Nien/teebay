@@ -9,6 +9,17 @@ class Store {
   sell = false;
   userId = 0;
   singleItem = 0;
+  productAdded = false;
+  openEdit = false;
+  editItem = {
+    id: 0,
+    title: "",
+    categories: [""],
+    description: "",
+    price: 0,
+    rentPrice: 0,
+    option: "",
+  };
 
   constructor() {
     makeObservable(this, {
@@ -19,6 +30,8 @@ class Store {
       sell: observable,
       singleItem: observable,
       userId: observable,
+      openEdit: observable,
+      editItem: observable,
       setEmail: action,
       setPassword: action,
       setLoggedIn: action,
@@ -27,6 +40,9 @@ class Store {
       setSell: action,
       setUserId: action,
       setSingleItem: action,
+      setOpenEdit: action,
+      setCloseEdit: action,
+      setEditItem: action,
     });
   }
 
@@ -61,10 +77,19 @@ class Store {
   };
   setUserId = (id) => {
     this.userId = id;
-    localStorage.setItem("userId", id);
   };
   setSingleItem = (id) => {
     this.singleItem = id;
+  };
+  setOpenEdit = () => {
+    this.openEdit = true;
+  };
+  setCloseEdit = () => {
+    this.openEdit = false;
+  };
+
+  setEditItem = (item) => {
+    this.editItem = item;
   };
 }
 

@@ -43,7 +43,6 @@ const SellPage = () => {
               p: "2%",
               position: "relative",
               overflowY: "scroll",
-              // bgcolor: "#c5c5c5",
             }}
           >
             {addProduct && <AddProductForm />}
