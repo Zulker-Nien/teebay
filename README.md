@@ -11,12 +11,12 @@ You will be needing only:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-This code sets up a React application with
+This code sets up a React application with an index.ts which is wrapped with:
 
-## Apollo client
+## 1. Apollo client
 
-for data fetching and
+The ApolloProvider component is used to provide the Apollo client instance to the application, which is used for data fetching and caching.
 
-## React Router
+## 2. React Router
 
-for routing.
+It imports the BrowserRouter component from the "react-router-dom" library for routing.
