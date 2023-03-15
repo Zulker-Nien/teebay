@@ -58,24 +58,40 @@ This folder holds all the types and interfaces required.
 
 All Graphql queries were made here.
 
-#### addProduct
+#### - addProduct
 
-This query is made on submission of the the addProcutForm
+Mutates product information and adds product to the database.
 
 #### Apollo Caching here helps to update the cache information and show an instantaneous result.
 
-#### buyProduct
+#### - buyProduct
 
 Let's you buy a product once the confirm modal is clicked
 
 #### Apollo Caching here helps to update the cache information and show an instantaneous result.
 
-#### deleteProduct
+#### - deleteProduct
 
 Let's you delete product data based on the id clicked
 
 #### Apollo Caching here helps to evict the cache information and show an instantaneous result.
 
-#### editProduct
+#### - editProduct
 
 This query takes an id from the selected product and runs a mutation to update the product#### Apollo #### ApolloCaching here helps to update the cache information and show an instantaneous result.
+
+#### - getAllProducts
+
+Retrieves all product
+
+#### ownedProduct
+
+Displays all product owned by a user either by creating, buying or renting
+
+#### - signUpUser
+
+Mutates user information and stores user data to database
+
+#### - loginUser
+
+Mutates login email and password
