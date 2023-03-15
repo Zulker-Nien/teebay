@@ -66,19 +66,13 @@ Mutates product information and adds product to the database.
 
 Let's you buy a product once the confirm modal is clicked
 
-#### (Apollo Caching here helps to update the cache information and show an instantaneous result.)
-
 #### - deleteProduct
 
 Let's you delete product data based on the id clicked
 
-#### (Apollo Caching here helps to evict the cache information and show an instantaneous result.)
-
 #### - editProduct
 
 This query takes an id from the selected product and runs a mutation to update the product
-
-#### (Apollo Caching here helps to update the cache information and show an instantaneous result.)
 
 #### - getAllProducts
 
@@ -104,13 +98,13 @@ Mutates login email and password
 
 This form handles the creation of a new product.
 
-### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
 
 ### b. EditProductForm.tsx
 
 This form handles the update of a new product.
 
-### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
 
 ### c. SignUpForm.tsx
 
@@ -120,4 +114,38 @@ This form handles the creation of a user.
 
 This form handles the login of a user.
 
-The Material UI components are fairly straightforward but one thing to note is that the Select component(which is the dropdown) changes based on a React changeEvent. The Options and Categories use the select component.
+#### SCOPE: JWT hasn't been implmented on the front end since this wasn't a requirement but the web tokens would help in handling sessions of users and refreshing pages.
+
+#### Current Scenario: User logged out on pageRefresh().
+
+The Material UI components are fairly straightforward but one thing to note is that the Select component(which is the dropdown) changes based on a React changeEvent. The Options and Categories use the select component. So the dafault value for this are changed inside the handleOption and handleCategories.
+
+## 5. Features
+
+### a. Buy/Rent ~ BuyPage.tsx
+
+This component helps in buying products.
+
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+
+### b. Sell ~ SellPage.tsx
+
+This component helps in buying products.
+
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+
+### c. List Products Lent/Bought ~ Transaction.tsx
+
+This component helps in viewing products that are lent or bought by the user.
+
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+
+### d. List all products created by user ~ UserProducts.tsx
+
+This component helps in:
+
+1. Viewing products that are created by the user.
+2. Editing products
+3. Deleting products
+
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)

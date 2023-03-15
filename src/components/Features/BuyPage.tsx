@@ -133,6 +133,7 @@ const BuyPage = () => {
   useEffect(() => {
     setBuy();
   }, [setBuy]);
+
   return (
     <div className="buyPageContainer">
       <Grid
