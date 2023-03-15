@@ -13,23 +13,15 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Dependencies Used for this project are:
 
-#### 1. Material UI
-
-#### 2. GraphQl
-
-#### 3. Apollo Client
-
-#### 4. MobX
-
-#### 5. MobX React Lite
-
-#### 6. React-hook-form
-
-#### 7. React Router
-
-#### 8.React Toastify
-
-#### 9. Sass
+1.  Material UI
+2.  GraphQl
+3.  Apollo Client
+4.  MobX
+5.  MobX React Lite
+6.  React-hook-form
+7.  React Router
+8.  React Toastify
+9.  Sass
 
 ## Walkthrough
 
