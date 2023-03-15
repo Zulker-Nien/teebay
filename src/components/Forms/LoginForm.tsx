@@ -4,12 +4,11 @@ import { TextField, Button, Box, Grid } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { ApolloClient, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Store from "../../store";
 import { toast } from "react-toastify";
 import LOGIN_USER from "../Queries/loginUser";
 import { User, LoginInput, LoginProps } from "../Types/userTypes";
-import apolloClient from "../../ApolloClient";
 
 interface LoginUserData {
   login: User;

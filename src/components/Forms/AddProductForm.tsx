@@ -51,12 +51,15 @@ interface CreateProductResponse {
 }
 const AddProductForm = () => {
   const productAddNotification = () => toast("Product added successfully.");
+
   const store = useContext(Store);
   const { setBuy, userId } = store;
-  const { register, handleSubmit } = useForm<ProductInputs>();
+
   const [addProduct] = useMutation<CreateProductResponse, CreateProductInput>(
     ADD_PRODUCT
   );
+
+  const { register, handleSubmit } = useForm<ProductInputs>();
 
   const onSubmit: SubmitHandler<ProductInputs> = async (data) => {
     try {

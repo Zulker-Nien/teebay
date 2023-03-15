@@ -18,11 +18,12 @@ const SignUpForm = () => {
     toast("An error occurred while signing up.");
 
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<SignUpInputs>();
 
   const [createUser] = useMutation<CreateUserResponse, CreateUserInput>(
     CREATE_USER
   );
+
+  const { register, handleSubmit } = useForm<SignUpInputs>();
 
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     if (data.password !== data.confirmPassword) {

@@ -62,8 +62,6 @@ All Graphql queries were made here.
 
 Mutates product information and adds product to the database.
 
-#### Apollo Caching here helps to update the cache information and show an instantaneous result.
-
 #### - buyProduct
 
 Let's you buy a product once the confirm modal is clicked
@@ -97,3 +95,29 @@ Mutates user information and stores user data to database
 #### - loginUser
 
 Mutates login email and password
+
+### 4. Forms
+
+4 forms were used:
+
+#### a. AddProductForm.tsx
+
+This form handles the creation of a new product.
+
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+
+#### b. EditProductForm.tsx
+
+This form handles the update of a new product.
+
+#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+
+#### c. SignUpForm.tsx
+
+This form handles the creation of a user.
+
+#### d. LoginForm.tsx
+
+This form handles the login of a user.
+
+The Material UI components are fairly straightforward but one thing to note is that the Select component(which is the dropdown) changes based on a React changeEvent. The Options and Categories use the select component.
