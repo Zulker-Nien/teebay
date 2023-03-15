@@ -1,6 +1,6 @@
 # TEEBAY FrontEnd Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## RUN BACKEND FIRST
 
 ## Available Scripts
 
