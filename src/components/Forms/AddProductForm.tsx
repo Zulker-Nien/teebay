@@ -21,8 +21,9 @@ import { toast } from "react-toastify";
 import Store from "../../store";
 import ADD_PRODUCT from "../Queries/addProduct";
 import { ProductInputs, CreateProductInput } from "../Types/productTypes";
-import LOGIN_USER from "../Queries/loginUser";
 import apolloClient from "../../ApolloClient";
+import GET_ALL_PRODUCTS from "../Queries/getAllProduct";
+import GET_ALL_USER_PRODUCTS from "../Queries/getUserProduct";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -46,6 +47,7 @@ const optionList = ["Rent", "Sell"];
 
 interface CreateProductResponse {
   addProduct: CreateProductInput;
+  data: ProductInputs;
 }
 const AddProductForm = () => {
   const productAddNotification = () => toast("Product added successfully.");
@@ -71,12 +73,27 @@ const AddProductForm = () => {
           ownerId: 0,
         },
       });
-
-      await productAddNotification();
+      apolloClient.writeQuery({
+        query: GET_ALL_PRODUCTS,
+        data: {
+          getAllProducts: data,
+        },
+      });
+      apolloClient.writeQuery({
+        query: GET_ALL_USER_PRODUCTS,
+        data: {
+          getProductsByUserId: data,
+        },
+        variables: {
+          userId,
+        },
+      });
+      productAddNotification();
       console.log(data);
       setBuy();
     } catch (error) {}
   };
+
   useEffect(() => {}, [handleSubmit]);
 
   const [categories, setCategories] = useState<string[]>([]);

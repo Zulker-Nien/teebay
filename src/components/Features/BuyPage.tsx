@@ -19,6 +19,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import BUY_PRODUCT from "../Queries/buyProduct";
 import GET_ALL_PRODUCTS from "../Queries/getAllProduct";
 import { BuyProductInput } from "../Types/productTypes";
+import apolloClient from "../../ApolloClient";
+import GET_PRODUCTS_OWNED from "../Queries/ownedProduct";
 
 interface BuyProductResponse {
   buyProduct: BuyProductInput;
@@ -69,6 +71,26 @@ const BuyPage = () => {
         ownerId: userId,
       },
     });
+    apolloClient.writeQuery({
+      query: BUY_PRODUCT,
+      data: {
+        buyProduct: data,
+      },
+      variables: {
+        id: singleItem,
+        status: "Sold",
+        ownerId: userId,
+      },
+    });
+    apolloClient.writeQuery({
+      query: GET_PRODUCTS_OWNED,
+      data: {
+        getProductsOwned: data,
+      },
+      variables: {
+        ownerId: userId,
+      },
+    });
     setBuy();
   };
   const handleRentClose = () => {
@@ -80,12 +102,32 @@ const BuyPage = () => {
         ownerId: userId,
       },
     });
+    apolloClient.writeQuery({
+      query: BUY_PRODUCT,
+      data: {
+        buyProduct: data,
+      },
+      variables: {
+        id: singleItem,
+        status: "Rented",
+        ownerId: userId,
+      },
+    });
+    apolloClient.writeQuery({
+      query: GET_PRODUCTS_OWNED,
+      data: {
+        getProductsOwned: data,
+      },
+      variables: {
+        ownerId: userId,
+      },
+    });
   };
 
   const { data } = useQuery(GET_ALL_PRODUCTS);
   useEffect(() => {
     if (data != null) {
-      setAllProducts(data.getAllProducts);
+      setAllProducts(data?.getAllProducts);
     }
   }, [data, setAllProducts]);
   useEffect(() => {
@@ -145,13 +187,14 @@ const BuyPage = () => {
                     Price: {item.price}
                   </Typography>
                   <Typography
-                    color={item.status === "" ? "#00ff00" : "#ff0000"}
+                    color={item.status === "Available" ? "#00ff00" : "#ff0000"}
                   >
-                    {item.status === "Rented"
+                    {/* {item.status === "Rented"
                       ? "Rented"
                       : item.status === "Sold"
                       ? "Sold"
-                      : "Available"}
+                      : "Available"} */}
+                    {item.status}
                   </Typography>
                 </CardContent>
                 <CardActions>

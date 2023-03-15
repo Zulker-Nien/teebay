@@ -21,6 +21,8 @@ import EditForm from "../Forms/EditForm";
 import GET_ALL_USER_PRODUCTS from "../Queries/getUserProduct";
 import { UserProduct } from "../Types/productTypes";
 import DELETE_PRODUCT from "../Queries/deleteProduct";
+import apolloClient from "../../ApolloClient";
+import { toast } from "react-toastify";
 interface UserProductData {
   getProductsByUserId: UserProduct;
 }
@@ -44,6 +46,8 @@ const style = {
 const UserProducts = () => {
   const store = useContext(Store);
   const { userId, openEdit, setOpenEdit, setEditItem } = store;
+  const productDeleteNotification = () =>
+    toast("Product deleted successfully.");
 
   const [allUserProducts, setAllUserProducts] = useState<any>();
   const [deleteId, setDeleteId] = useState<number>();
@@ -71,15 +75,19 @@ const UserProducts = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDelete = useCallback(
-    (index: any) => {
-      deleteProduct({
-        variables: { id: deleteId },
-      });
-      setOpen(false);
-    },
-    [deleteId, deleteProduct]
-  );
+  const handleDelete = useCallback(() => {
+    deleteProduct({
+      variables: { id: deleteId },
+    });
+    setOpen(false);
+    apolloClient.cache.evict({
+      id: apolloClient.cache.identify({
+        __typename: "ProductInfo",
+        id: deleteId,
+      }),
+    });
+    productDeleteNotification();
+  }, [deleteId, deleteProduct]);
 
   return (
     <div>
