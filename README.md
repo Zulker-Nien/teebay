@@ -44,4 +44,8 @@ Finally, states from MOBX store enable the simple string matching which helps us
 
 This file consists the showCase of buy or sell page based on state from MOBX. If authorization isn't complete, the user would be navigated back to the login page.
 
-##
+## Components
+
+### Ui
+
+Three UI Components namely <MenuToggle/>, <Navbar/> and <SearchBar/> were kept separate and a call was made
