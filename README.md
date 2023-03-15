@@ -33,5 +33,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The entry point is wrapped with Apollo Client and Browser router.
 The Apollo Client receives a client information property from
-#ApolloClient.tsx
+
+#### ApolloClient.tsx
+
 stored in the src folder
