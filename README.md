@@ -23,9 +23,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 8.  React Toastify
 9.  Sass
 
-## Walkthrough
+# Walkthrough
 
-### ROOT BASIC FILES
+## ROOT BASIC FILES
 
 #### index.ts
 
@@ -44,17 +44,17 @@ Finally, states from MOBX store enable the simple string matching which helps us
 
 This file consists the showCase of buy or sell page based on state from MOBX. If authorization isn't complete, the user would be navigated back to the login page.
 
-## Components
+# Components
 
-### 1. Ui
+## 1. Ui
 
 Three UI Components namely MenuToggle, Navbar and SearchBar were kept separate.
 
-### 2. Types
+## 2. Types
 
 This folder holds all the types and interfaces required.
 
-### 3. Queries
+## 3. Queries
 
 All Graphql queries were made here.
 
@@ -96,27 +96,27 @@ Mutates user information and stores user data to database
 
 Mutates login email and password
 
-### 4. Forms
+## 4. Forms
 
 4 forms were used:
 
-#### a. AddProductForm.tsx
+### a. AddProductForm.tsx
 
 This form handles the creation of a new product.
 
-#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
 
-#### b. EditProductForm.tsx
+### b. EditProductForm.tsx
 
 This form handles the update of a new product.
 
-#### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
+### (Apollo Caching is used here and it helps to update the cache information and show an instantaneous result in the frontend as cards.)
 
-#### c. SignUpForm.tsx
+### c. SignUpForm.tsx
 
 This form handles the creation of a user.
 
-#### d. LoginForm.tsx
+### d. LoginForm.tsx
 
 This form handles the login of a user.
 
