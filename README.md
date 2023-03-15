@@ -46,15 +46,15 @@ This file consists the showCase of buy or sell page based on state from MOBX. If
 
 ## Components
 
-### Ui
+### 1. Ui
 
 Three UI Components namely MenuToggle, Navbar and SearchBar were kept separate.
 
-### Types
+### 2. Types
 
 This folder holds all the types and interfaces required.
 
-### Queries
+### 3. Queries
 
 All Graphql queries were made here.
 
