@@ -11,26 +11,27 @@ You will be needing only:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Packages Used for this project are:
+## Dependencies Used for this project are:
 
-### GraphQl `npm i graphql`
+# Material UI
 
-### MobX `npm i mobx`
+# GraphQl
 
-### MobX React Lite `npm i mobx-react-lite`
+# Apollo Client
 
-### React-hook-form `npm i react-hook-form`
+# MobX
 
-### React Router `npm i react-router-dom`
+# MobX React Lite
 
-### React Toastify `npm i react-toastify`
+# React-hook-form
 
-This code sets up a React application with an index.ts which is wrapped with:
+# React Router
 
-## 1. Apollo Client
+# React Toastify
 
-The ApolloProvider component is used to provide the Apollo client instance to the application, which is used for data fetching and caching.
+# Sass
 
-## 2. React Router
-
-It imports the BrowserRouter component from the "react-router-dom" library for routing.
+The entry point is wrapped with Apollo Client and Browser router.
+The Apollo Client receives a client information property from
+#ApolloClient.tsx
+stored in the src folder
