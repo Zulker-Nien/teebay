@@ -13,7 +13,7 @@ const Home = (props: HomeProps) => {
   const navigate = useNavigate();
 
   const store = useContext(Store);
-  const { buy, sell, userId } = store;
+  const { buy, sell } = store;
 
   return (
     <>
@@ -22,7 +22,6 @@ const Home = (props: HomeProps) => {
           <Navbar />
           {buy && <BuyPage />}
           {sell && <SellPage />}
-          {userId}
         </div>
       ) : (
         navigate("/")
