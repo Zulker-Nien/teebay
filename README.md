@@ -68,17 +68,19 @@ Mutates product information and adds product to the database.
 
 Let's you buy a product once the confirm modal is clicked
 
-#### Apollo Caching here helps to update the cache information and show an instantaneous result.
+#### (Apollo Caching here helps to update the cache information and show an instantaneous result.)
 
 #### - deleteProduct
 
 Let's you delete product data based on the id clicked
 
-#### Apollo Caching here helps to evict the cache information and show an instantaneous result.
+#### (Apollo Caching here helps to evict the cache information and show an instantaneous result.)
 
 #### - editProduct
 
-This query takes an id from the selected product and runs a mutation to update the product#### Apollo #### ApolloCaching here helps to update the cache information and show an instantaneous result.
+This query takes an id from the selected product and runs a mutation to update the product
+
+#### (Apollo Caching here helps to update the cache information and show an instantaneous result.)
 
 #### - getAllProducts
 
