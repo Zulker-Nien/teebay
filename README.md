@@ -13,10 +13,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 This code sets up a React application with
 
-##Apollo client
+## Apollo client
 
 for data fetching and
 
-##React Router
+## React Router
 
 for routing.
