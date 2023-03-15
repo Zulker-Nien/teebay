@@ -48,4 +48,34 @@ This file consists the showCase of buy or sell page based on state from MOBX. If
 
 ### Ui
 
-Three UI Components namely <MenuToggle/>, <Navbar/> and <SearchBar/> were kept separate and a call was made
+Three UI Components namely MenuToggle, Navbar and SearchBar were kept separate.
+
+### Types
+
+This folder holds all the types and interfaces required.
+
+### Queries
+
+All Graphql queries were made here.
+
+#### addProduct
+
+This query is made on submission of the the addProcutForm
+
+#### Apollo Caching here helps to update the cache information and show an instantaneous result.
+
+#### buyProduct
+
+Let's you buy a product once the confirm modal is clicked
+
+#### Apollo Caching here helps to update the cache information and show an instantaneous result.
+
+#### deleteProduct
+
+Let's you delete product data based on the id clicked
+
+#### Apollo Caching here helps to evict the cache information and show an instantaneous result.
+
+#### editProduct
+
+This query takes an id from the selected product and runs a mutation to update the product#### Apollo #### ApolloCaching here helps to update the cache information and show an instantaneous result.
